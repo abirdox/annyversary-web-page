@@ -42,9 +42,9 @@ const V12025 = () => {
             );
 
             setImageUrls(urls);
-            setTimeout(() => {
-                handlePlayMusic()
-            }, 3000)
+            // setTimeout(() => {
+            //     handlePlayMusic()
+            // }, 3000)
             // handlePlayMusic()
         };
 
