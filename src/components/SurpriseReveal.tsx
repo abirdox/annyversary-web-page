@@ -13,10 +13,11 @@ const SurpriseReveal: React.FC<SurpriseRevealProps> = ({ title, content }) => {
   const [errorMessage, setErrorMessage] = useState(""); // New state for error message
 
   const correctPasscode = "I WIll Love You Forever"; // Change this to your desired passcode
+  // const correctPasscode = " "; // Change this to your desired passcode
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (passcode === correctPasscode) {
+    if (passcode.toLocaleLowerCase().trim() === correctPasscode.toLocaleLowerCase().trim()) {
       handleReveal();
       setIsModalOpen(false);
       setPasscode("");
@@ -68,9 +69,16 @@ const SurpriseReveal: React.FC<SurpriseRevealProps> = ({ title, content }) => {
             <div className="text-6xl mb-4 animate-bounce">🌟</div>
             <p className="text-xl text-gray-700 italic leading-relaxed">
               {content}
+              <img
+                src="/gift.jpeg"
+                alt="gift"
+                className="mx-auto mt-2 w-64 h-44 sm:w-80 sm:h-60 rounded-lg object-cover"
+              />
             </p>
+            <p>Look at the box of your মিনি ছাতা।</p>
             <div className="mt-6 text-4xl animate-pulse">💕✨💖✨💕</div>
           </div>
+
         </div>
       )}
       {isModalOpen && (
