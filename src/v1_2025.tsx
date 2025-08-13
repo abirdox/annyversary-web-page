@@ -42,15 +42,14 @@ const V12025 = () => {
             );
 
             setImageUrls(urls);
+            
             // setTimeout(() => {
             //     handlePlayMusic()
-            // }, 3000)
-            // handlePlayMusic()
+            // }, 1000)
         };
 
         fetchImages();
     }, []);
-
 
     const quotes = [
         "You are my sunshine on cloudy days, my anchor in stormy seas. 💕",
@@ -431,7 +430,7 @@ const V12025 = () => {
             {/* Your page content */}
 
             {/* Hidden audio element */}
-            <audio ref={audioRef} src="/music.mp3" preload="auto" />
+            {/* <audio ref={audioRef} src="/music.mp3" preload="auto" /> */}
             {/* </div> */}
         </div>
     )
