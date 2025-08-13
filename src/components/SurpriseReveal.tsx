@@ -10,8 +10,9 @@ const SurpriseReveal: React.FC<SurpriseRevealProps> = ({ title, content }) => {
   const [isRevealed, setIsRevealed] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [passcode, setPasscode] = useState("");
-  const correctPasscode = "I WIll Love You Forever"; // Change this to your desired passcode
+  const [errorMessage, setErrorMessage] = useState(""); // New state for error message
 
+  const correctPasscode = "I WIll Love You Forever"; // Change this to your desired passcode
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,8 +20,9 @@ const SurpriseReveal: React.FC<SurpriseRevealProps> = ({ title, content }) => {
       handleReveal();
       setIsModalOpen(false);
       setPasscode("");
+      setErrorMessage("");
     } else {
-      alert("Incorrect passcode! 💔");
+      setErrorMessage("I Love You Dear! 💔 Solve the puzzle at home first!");
     }
   };
 
@@ -50,7 +52,10 @@ const SurpriseReveal: React.FC<SurpriseRevealProps> = ({ title, content }) => {
     <div className="relative" id="sparkle-container">
       {!isRevealed ? (
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setIsModalOpen(true);
+            setErrorMessage(""); // Reset error when opening modal
+          }}
           className="group bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-8 py-4 rounded-full text-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-3"
         >
           <Gift className="group-hover:animate-bounce" size={24} />
@@ -80,6 +85,9 @@ const SurpriseReveal: React.FC<SurpriseRevealProps> = ({ title, content }) => {
                 onChange={(e) => setPasscode(e.target.value)}
                 className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-400"
               />
+              {errorMessage && (
+                <p className="text-red-500 text-sm text-center">{errorMessage}</p>
+              )}
               <button
                 type="submit"
                 className="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition"
