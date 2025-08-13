@@ -12,12 +12,12 @@ const SurpriseReveal: React.FC<SurpriseRevealProps> = ({ title, content }) => {
   const [passcode, setPasscode] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); // New state for error message
 
-  const correctPasscode = "I WIll Love You Forever"; // Change this to your desired passcode
+  const correctPasscode = "I Will Love You Forever"; // Change this to your desired passcode
   // const correctPasscode = " "; // Change this to your desired passcode
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (passcode.toLocaleLowerCase().trim() === correctPasscode.toLocaleLowerCase().trim()) {
+    if (passcode == correctPasscode) {
       handleReveal();
       setIsModalOpen(false);
       setPasscode("");
