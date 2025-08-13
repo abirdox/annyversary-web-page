@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Heart, Calendar, MapPin, Clock, Camera, Quote, Sparkles, Gift, Star, Music } from 'lucide-react';
 import { supabase } from './supabase'
 import SurpriseReveal from './components/SurpriseReveal';
@@ -8,6 +8,17 @@ const V12025 = () => {
     const [currentQuote, setCurrentQuote] = useState(0);
     const [timeElapsed, setTimeElapsed] = useState({ years: 0, months: 0, days: 0, hours: 0 });
     const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+    const audioRef = useRef<HTMLAudioElement>(null);
+
+    const handlePlayMusic = () => {
+        if (audioRef.current) {
+            audioRef.current.loop = true;
+            audioRef.current.play().catch((err) => {
+                console.log("Autoplay blocked:", err);
+            });
+        }
+    };
 
     useEffect(() => {
         const fetchImages = async () => {
@@ -31,14 +42,14 @@ const V12025 = () => {
             );
 
             setImageUrls(urls);
+            setTimeout(() => {
+                handlePlayMusic()
+            }, 3000)
+            // handlePlayMusic()
         };
 
         fetchImages();
     }, []);
-
-    console.log(imageUrls)
-
-    const backgroundImage = "https://tlapmuaszjrzkzccrxkg.supabase.co/storage/v1/object/public/annyversary/2025/WhatsApp%20Image%202025-08-13%20at%201.39.45%20PM.jpeg"
 
 
     const quotes = [
@@ -84,6 +95,7 @@ const V12025 = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-50 to-indigo-100 relative overflow-hidden">
+
             {/* Floating Hearts Background */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 {[...Array(20)].map((_, i) => (
@@ -116,14 +128,74 @@ const V12025 = () => {
                         <p className="text-lg md:text-xl text-gray-700 mb-8 animate-slide-in-right">
                             From your loving husband, <span className="font-bold text-purple-600">Abir Hosen Ashik</span>
                         </p>
-                        <div className="flex justify-center items-center space-x-4 text-2xl animate-bounce">
+
+                        {/* Heart line */}
+                        <div className="flex justify-center items-center space-x-4 text-2xl animate-bounce mb-8">
                             <Heart className="text-red-500 fill-current" />
                             <span className="text-pink-600">∞</span>
                             <Heart className="text-red-500 fill-current" />
                         </div>
+
+                        {/* Play Music Button */}
+                        <style>{`
+                            @keyframes breathing {
+                            0%, 100% { transform: scale(1); }
+                            50% { transform: scale(1.05); }
+                            }
+                            @keyframes bubbleFloat {
+                            0% { transform: translateY(0) scale(1); opacity: 0.6; }
+                            50% { opacity: 1; }
+                            100% { transform: translateY(-50px) scale(1.2); opacity: 0; }
+                            }
+                            .breathing {
+                            animation: breathing 2s ease-in-out infinite;
+                            }
+                            .bubble {
+                            position: absolute;
+                            border-radius: 9999px;
+                            background-color: rgba(255, 255, 255, 0.4);
+                            animation: bubbleFloat 3s ease-in-out infinite;
+                            }
+                            `}
+                        </style>
+
+                        <button
+                            onClick={() => {
+                                const audio = document.getElementById(
+                                    "anniversary-audio"
+                                ) as HTMLAudioElement;
+                                if (audio) {
+                                    audio.loop = true;
+                                    audio.play().catch(() => console.log("Autoplay blocked"));
+                                }
+                            }}
+                            className="breathing relative overflow-hidden inline-flex items-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl"
+                        >
+                            {/* Floating bubbles */}
+                            {[...Array(6)].map((_, i) => (
+                                <span
+                                    key={i}
+                                    className="bubble"
+                                    style={{
+                                        width: `${Math.random() * 8 + 4}px`,
+                                        height: `${Math.random() * 8 + 4}px`,
+                                        left: `${Math.random() * 100}%`,
+                                        bottom: `0px`,
+                                        animationDelay: `${Math.random() * 2}s`,
+                                    }}
+                                ></span>
+                            ))}
+
+                            🎵 Play Music
+                        </button>
+
+                        <audio id="anniversary-audio" src="/music.mp3" preload="auto" />
+
+
                     </div>
                 </div>
             </section>
+
 
             {/* Time Together Counter */}
             <section className="py-16 px-4 relative z-10">
@@ -186,24 +258,64 @@ const V12025 = () => {
                     <h2 className="text-3xl md:text-5xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-16">
                         Our Beautiful Memories 📸
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {imageUrls?.map((_, index) => (
-                            <div key={index} className="group relative overflow-hidden rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 h-64">
-                                <div className="absolute inset-0 bg-gradient-to-br from-pink-400/80 to-purple-600/80 flex items-center justify-center">
-                                    <div className="text-center text-white">
-                                        <Camera className="w-12 h-12 mx-auto mb-4 opacity-80" />
-                                        <p className="text-sm">Beautiful Memory #{index + 1}</p>
-                                        <p className="text-xs mt-2 opacity-100"><img src={_} />💕</p>
-                                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {imageUrls?.map((url, index) => (
+                            <div
+                                key={index}
+                                className="group relative rounded-[2rem] border-[6px] border-pink-300 shadow-[0_0_30px_rgba(255,105,180,0.5)] overflow-hidden transform hover:scale-105 transition-all duration-500"
+                                style={{
+                                    background:
+                                        "linear-gradient(145deg, rgba(255,182,193,0.4), rgba(255,105,180,0.4))",
+                                }}
+                            >
+                                {/* Inner glow frame */}
+                                <div className="absolute inset-0 rounded-[1.8rem] border-4 border-white/50 pointer-events-none"></div>
+
+                                {/* Image */}
+                                <img
+                                    src={url}
+                                    alt={`Memory ${index + 1}`}
+                                    className="w-full h-64 object-cover rounded-[1.5rem] transition-transform duration-500 group-hover:scale-110"
+                                />
+
+                                {/* Top overlay with text */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-pink-500/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-end pb-6 text-white">
+                                    <p className="text-lg font-semibold drop-shadow-lg">
+                                        I Will Love You Forever
+                                    </p>
+                                    <Heart className="w-8 h-8 mt-2 animate-bounce" />
                                 </div>
-                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <Heart className="w-8 h-8 text-white animate-pulse" />
-                                </div>
+
+                                {/* Floating hearts animation */}
+                                {[...Array(5)].map((_, i) => (
+                                    <span
+                                        key={i}
+                                        className="absolute text-pink-200"
+                                        style={{
+                                            top: `${Math.random() * 100}%`,
+                                            left: `${Math.random() * 100}%`,
+                                            animation: `floatHeart 6s ease-in-out infinite`,
+                                            animationDelay: `${i * 1.2}s`,
+                                        }}
+                                    >
+                                        ❤️
+                                    </span>
+                                ))}
                             </div>
                         ))}
                     </div>
                 </div>
+
+                {/* Floating heart animation */}
+                <style>{`
+                    @keyframes floatHeart {
+                    0% { transform: translateY(0) scale(1); opacity: 0.8; }
+                    50% { opacity: 1; }
+                    100% { transform: translateY(-50px) scale(1.2); opacity: 0; }
+                    }
+                `}</style>
             </section>
+
 
             {/* Romantic Quotes Carousel */}
             <section className="py-16 px-4 relative z-10 bg-gradient-to-r from-red-50/80 to-pink-50/80">
@@ -315,6 +427,12 @@ const V12025 = () => {
                     ))}
                 </div>
             </footer>
+            {/* <div className="w-screen h-screen"> */}
+            {/* Your page content */}
+
+            {/* Hidden audio element */}
+            <audio ref={audioRef} src="/music.mp3" preload="auto" />
+            {/* </div> */}
         </div>
     )
 }
