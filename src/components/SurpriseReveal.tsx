@@ -17,7 +17,7 @@ const SurpriseReveal: React.FC<SurpriseRevealProps> = ({ title, content }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (passcode == correctPasscode) {
+    if (passcode.replace(/\s+/g, "").toLowerCase() == correctPasscode.replace(/\s+/g, "").toLowerCase()) {
       handleReveal();
       setIsModalOpen(false);
       setPasscode("");
